@@ -21,6 +21,8 @@
 # include "get_next_line.h"
 # include "libft.h"
 
+//# include "SDL.h"
+//# include "./frameworks/SDL2.framework/Headers/SDL.h"
 # include "SDL_image.h"
 # include "SDL_ttf.h"
 # include "SDL_mixer.h"
@@ -35,11 +37,11 @@
 //	double			y;
 //}					t_player;
 
-typedef struct		s_vector2
-{
-	double			x;
-	double			y;
-}					t_vec2;
+//typedef struct		s_vector2
+//{
+//	double			x;
+//	double			y;
+//}					t_vec2;
 
 typedef struct		s_pix
 {
@@ -47,7 +49,8 @@ typedef struct		s_pix
 	int				fd;
 	size_t 			width;
 	size_t			height;
-	t_vec2			**coord;
+	int				j;
+	int				**map_val;
 }					t_pix;
 
 typedef struct		s_lines
@@ -60,7 +63,7 @@ void				is_file_valid(t_pix *pix, t_lines **lines_head);
 int					errors_msg(int err);
 void				ft_add_to_end(t_lines **head, char *str);
 void				ft_del_all(t_lines **head);
-int					parsing(t_pix *map, t_lines *lines_head);
+int					parsing(t_pix *pix, t_lines *lines_head);
 
 
 #endif

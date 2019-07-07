@@ -43,54 +43,86 @@
 //		res = COLOR;
 //	return (res);
 //}
-//
-//static int		ft_atoi_i(const char *str, size_t *i)
+
+//static void		check_and_change(int *pix->map_val[y][x], t_lines *lines_head, int x, int y)
 //{
-//	size_t		num;
-//	char		minus;
 //
-//	while (str[*i] == ' ' || str[*i] == '\t' || str[*i] == '\r'
-//		|| str[*i] == '\n' || str[*i] == '\v' || str[*i] == '\f')
-//		(*i)++;
-//	num = 0;
-//	minus = 1;
-//	if (str[*i] == '-')
-//		minus = -1;
-//	while (str[*i] == '+' || str[*i] == '-')
-//		(*i)++;
-//	while (str[*i] && (str[*i] >= '0') && (str[*i] <= '9'))
-//	{
-//		num = (num * 10) + ((int)str[*i] - '0');
-//		(*i)++;
-//	}
-//	if ((num > 9223372036854775807 && minus == 1))
-//		return (-1);
-//	if (num > 9223372036854775807 && minus == -1)
-//		return (0);
-//	return ((int)(num * minus));
 //}
 
-int				parsing(t_pix *map, t_lines *lines_head)
+static int		check_player(int num, t_pix *pix)
+{
+	if (num == 9)
+		pix->j > 0 ? num = 0 : pix->j++;
+	return (num);
+}
+
+static int		check_frame(int num)
+{
+	if (num == 0 || num == 9)
+		num = 1;
+	return (num);
+}
+
+static int		ft_atoi_i(const char *str, size_t *i)
+{
+	size_t		num;
+	char		minus;
+
+	while (str[*i] == ' ' || str[*i] == '\t' || str[*i] == '\r'
+		|| str[*i] == '\n' || str[*i] == '\v' || str[*i] == '\f')
+		(*i)++;
+	num = 0;
+	minus = 1;
+	if (str[*i] == '-')
+		minus = -1;
+	while (str[*i] == '+' || str[*i] == '-')
+		(*i)++;
+	while (str[*i] && (str[*i] >= '0') && (str[*i] <= '9'))
+	{
+		num = (num * 10) + ((int)str[*i] - '0');
+		(*i)++;
+	}
+	if ((num > 9223372036854775807 && minus == 1))
+		return (-1);
+	if (num > 9223372036854775807 && minus == -1)
+		return (0);
+	return ((int)(num * minus));
+}
+
+int				parsing(t_pix *pix, t_lines *lines_head)
 {
 	size_t	y;
 	size_t	x;
 	size_t	i;
 
-	if (!(map->coord = (t_vec2 **)malloc(map->height * sizeof(t_vec2 *))))
+	if (!(pix->map_val = (int **)malloc(pix->height * sizeof(int *))))
 		errors_msg(4);
 	y = UINT64_MAX;
-	while (lines_head && ++y < map->height)
+	while (lines_head && ++y < pix->height)
 	{
-		if (!(map->coord[y] = (t_vec2 *)malloc(map->width * sizeof(t_vec2))))
+		if (!(pix->map_val[y] = (int *)malloc(pix->width * sizeof(int))))
 			errors_msg(4);
 		x = UINT64_MAX;
 		i = 0;
-		while (++x < map->width)
+		while (++x < pix->width)
 		{
-			map->coord[y][x].pos = (t_vec2){ x, y,
-											ft_atoi_i(lines_head->str, &i) };
+//			check_and_change(pix->map_val[y][x], lines_head, x, y);
+
+
+
+			pix->map_val[y][x] = ft_atoi_i(lines_head->str, &i);
+			if (x == 0 || y == 0 || x == pix->width - 1 || y == pix->height - 1)
+				pix->map_val[y][x] = check_frame(pix->map_val[y][x]);
+			else
+			{
+				pix->map_val[y][x] = check_player(pix->map_val[y][x], pix);
+				if (pix->j == 0 && y == pix->height - 2 && x == pix->width - 2)
+					pix->map_val[y][x] = 9;
+			}
+			printf("%d ", pix->map_val[y][x]);
 		}
 		lines_head = lines_head->next;
+		printf("\n");
 	}
 	return (0);
 }

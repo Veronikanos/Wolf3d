@@ -13,7 +13,6 @@
 #include "wolf3d.h"
 
 
-
 static t_pix	*init(t_pix *pix)
 {
 	if (!pix)
@@ -21,6 +20,7 @@ static t_pix	*init(t_pix *pix)
 	pix->win = SDL_CreateWindow(NAME, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
 	pix->width = 0;
 	pix->height = 0;
+	pix->j = 0;
 	return (pix);
 }
 
@@ -30,7 +30,7 @@ int				main(int argc, char **argv)
 	(void)argc;
 	(void)argv;
 	int running = 1;
-	SDL_Event event;
+//	SDL_Event event;
 
 
 	t_lines		*lines_head;

@@ -87,5 +87,5 @@ void			is_file_valid(t_pix *pix, t_lines **lines_head)
 		}
 		ft_memdel((void *)&buf);
 	}
-	pix->height == 0 ? errors_msg(1) : 0;
+	pix->height < 3 ? errors_msg(1) : 0;
 }
