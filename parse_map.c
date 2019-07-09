@@ -44,23 +44,10 @@
 //	return (res);
 //}
 
-//static void		check_and_change(int *pix->map_val[y][x], t_lines *lines_head, int x, int y)
-//{
-//
-//}
 
-static int		check_player(int num, t_pix *pix)
+static int		fix_frame(int num)
 {
-	if (num == 9)
-		pix->j > 0 ? num = 0 : pix->j++;
-	return (num);
-}
-
-static int		check_frame(int num)
-{
-	if (num == 0 || num == 9)
-		num = 1;
-	return (num);
+	return ((num == 0 || num == 9) ? 1 : num);
 }
 
 static int		ft_atoi_i(const char *str, size_t *i)
@@ -106,23 +93,16 @@ int				parsing(t_pix *pix, t_lines *lines_head)
 		i = 0;
 		while (++x < pix->width)
 		{
-//			check_and_change(pix->map_val[y][x], lines_head, x, y);
-
-
-
 			pix->map_val[y][x] = ft_atoi_i(lines_head->str, &i);
 			if (x == 0 || y == 0 || x == pix->width - 1 || y == pix->height - 1)
-				pix->map_val[y][x] = check_frame(pix->map_val[y][x]);
-			else
-			{
-				pix->map_val[y][x] = check_player(pix->map_val[y][x], pix);
-				if (pix->j == 0 && y == pix->height - 2 && x == pix->width - 2)
-					pix->map_val[y][x] = 9;
-			}
+				pix->map_val[y][x] = fix_frame(pix->map_val[y][x]);
+			else if (pix->map_val[y][x] == 9 && !(pix->map_val[y][x] = 0))
+				pix->pos = (t_vec2){ x, y };
 			printf("%d ", pix->map_val[y][x]);
 		}
 		lines_head = lines_head->next;
 		printf("\n");
 	}
+	(pix->pos.x == 0 && pix->pos.y == 0) ? errors_msg(3) : 0;
 	return (0);
 }

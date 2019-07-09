@@ -20,7 +20,7 @@ static t_pix	*init(t_pix *pix)
 	pix->win = SDL_CreateWindow(NAME, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
 	pix->width = 0;
 	pix->height = 0;
-	pix->j = 0;
+	pix->pos = (t_vec2){ 0, 0 };
 	return (pix);
 }
 
@@ -44,9 +44,10 @@ int				main(int argc, char **argv)
 	init(pix);
 	pix->fd = open(argv[1], O_RDONLY);
 	if (read(pix->fd, NULL, 0))
-		errors_msg(1);
+		errors_msg(6);
 	is_file_valid(pix, &lines_head);
 	parsing(pix, lines_head);
+	//write_tex(int **map_val);
 	close(pix->fd);
 
 	printf("%s\n", "okaaaay");

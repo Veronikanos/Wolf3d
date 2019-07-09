@@ -45,16 +45,24 @@
 //	return (1);
 //}
 
+
+static int		is_texture(int c)
+{
+	if ((c >= '0' && c <= '8') || c <= '9')
+		return (1);
+	return (0);
+}
+
 static int		is_valid_row(char const *buf)
 {
 	size_t i;
 
 	if (!buf)
-		return(1);		//ошибки
+		errors_msg(7);
 	i = 0;
 	while (buf[i])
 	{
-		if (!(ft_isdigit(buf[i]) || buf[i] == ' '))
+		if (!(is_texture(buf[i]) || buf[i] == ' '))
 			errors_msg(1);
 		if (buf[i])
 			++i;

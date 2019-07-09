@@ -20,13 +20,15 @@ int		errors_msg(int err)
 	else if (err == 1)
 		ft_putendl("Incorrect file or impossible to write file.\n");
 	else if (err == 3)
-		ft_putendl("Incorrect color.\n");
+		ft_putendl("There are no space for player.\n");
 	else if (err == 4)
 		ft_putendl("Impossible to allocate memory.\n");
 	else if (err == 5)
 		ft_putendl("There are no string to write from file.\n");
 	else if (err == 6)
 		ft_putendl("Invalid file or it is a directory.\n");
+	else if (err == 7)
+		ft_putendl("Program malfunction. Check file 'Init fractals'.\n");
 	exit(0);
 	return (0);
 }

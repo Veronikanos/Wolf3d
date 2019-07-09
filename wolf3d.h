@@ -37,11 +37,11 @@
 //	double			y;
 //}					t_player;
 
-//typedef struct		s_vector2
-//{
-//	double			x;
-//	double			y;
-//}					t_vec2;
+typedef struct		s_vector2
+{
+	double			x;
+	double			y;
+}					t_vec2;
 
 typedef struct		s_pix
 {
@@ -49,7 +49,7 @@ typedef struct		s_pix
 	int				fd;
 	size_t 			width;
 	size_t			height;
-	int				j;
+	t_vec2			pos;
 	int				**map_val;
 }					t_pix;
 
