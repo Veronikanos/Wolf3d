@@ -28,7 +28,9 @@ int		errors_msg(int err)
 	else if (err == 6)
 		ft_putendl("Invalid file or it is a directory.\n");
 	else if (err == 7)
-		ft_putendl("Program malfunction. Check file 'Init fractals'.\n");
+		ft_putendl("Program malfunction.\n");
+	else if (err == 8)
+		ft_putendl("Impossible to init SDL2 window.\n");
 	exit(0);
 	return (0);
 }

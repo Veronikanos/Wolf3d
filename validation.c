@@ -12,47 +12,6 @@
 
 #include "wolf3d.h"
 
-//int				is_hex(char c)
-//{
-//	if (ft_isdigit(c)
-//	|| (c >= 'a' && c <= 'f')
-//	|| (c >= 'A' && c <= 'F'))
-//		return (1);
-//	return (0);
-//}
-//
-//static int		ft_is_color(char const *str, size_t *i)
-//{
-//	size_t len;
-//
-//	++(*i);
-//	if (str[(*i)++] == '0' && str[(*i)++] == 'x')
-//	{
-//		len = 0;
-//		while (str[*i] && str[*i] != ' ')
-//		{
-//			if (is_hex(str[*i]))
-//				len++;
-//			else
-//				errors_msg(1);
-//			(*i)++;
-//		}
-//	}
-//	else
-//		errors_msg(1);
-//	if (len < 1 || len > 8)
-//		errors_msg(1);
-//	return (1);
-//}
-
-
-static int		is_texture(int c)
-{
-	if ((c >= '0' && c <= '8') || c <= '9')
-		return (1);
-	return (0);
-}
-
 static int		is_valid_row(char const *buf)
 {
 	size_t i;
@@ -62,7 +21,7 @@ static int		is_valid_row(char const *buf)
 	i = 0;
 	while (buf[i])
 	{
-		if (!(is_texture(buf[i]) || buf[i] == ' '))
+		if (!(ft_isdigit(buf[i]) || buf[i] == ' '))
 			errors_msg(1);
 		if (buf[i])
 			++i;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   wolf3d.h                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vtlostiu <vtlostiu@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 21:32:53 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/04 21:24:28 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/11 20:03:16 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,18 @@
 # define WIDTH		512
 # define HEIGHT		384
 # define NAME		"Wolf3d by vtlostiu"
+# define TEXTURES	4
 
-//typedef struct		s_player
-//{
-//	double			x;
-//	double			y;
-//}					t_player;
+# define RED		0xFC0000
+# define GREEN		0x45A400
+# define BLUE		0x7FE6F8
+# define YELLOW		0xFEF963
+
+typedef struct			s_draw
+{
+	int		x;
+	int		y;
+}						t_draw;
 
 typedef struct		s_vector2
 {
@@ -46,11 +52,15 @@ typedef struct		s_vector2
 typedef struct		s_pix
 {
 	SDL_Window		*win;
+	SDL_Renderer	*ren;
+	SDL_Texture		*image;
+	SDL_Surface		*surf;
 	int				fd;
 	size_t 			width;
 	size_t			height;
 	t_vec2			pos;
-	int				**map_val;
+	int				buf[HEIGHT][WIDTH];
+	int				**map;
 }					t_pix;
 
 typedef struct		s_lines
@@ -63,7 +73,7 @@ void				is_file_valid(t_pix *pix, t_lines **lines_head);
 int					errors_msg(int err);
 void				ft_add_to_end(t_lines **head, char *str);
 void				ft_del_all(t_lines **head);
-int					parsing(t_pix *pix, t_lines *lines_head);
+int					parsing(t_pix *pix, t_lines *lst, int **map, t_vec2 pos);
 
 
 #endif

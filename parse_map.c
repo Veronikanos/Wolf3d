@@ -11,39 +11,6 @@
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-//
-//static int		atoi_letter_check(char c)
-//{
-//	if (c >= '0' && c <= '9')
-//		return (c - '0');
-//	else if (c >= 'a' && c <= 'f')
-//		return (c - 'a' + 10);
-//	else if (c >= 'A' && c <= 'F')
-//		return (c - 'A' + 10);
-//	return (0);
-//}
-//
-//static int		ft_atoi_base_color(const char *str, size_t *i)
-//{
-//	int		res;
-//
-//	res = 0;
-//	if (str[(*i)++] == ',' && str[(*i)++] == '0' && str[(*i)++] == 'x')
-//	{
-//		while (str[*i] != 32 && str[*i] != '\n' && str[*i] != '\0')
-//		{
-//			if (is_hex(str[*i]))
-//				res = res * 16 + atoi_letter_check(str[*i]);
-//			else
-//				errors_msg(3);
-//			(*i)++;
-//		}
-//	}
-//	else
-//		res = COLOR;
-//	return (res);
-//}
-
 
 static int		fix_frame(int num)
 {
@@ -76,33 +43,34 @@ static int		ft_atoi_i(const char *str, size_t *i)
 	return ((int)(num * minus));
 }
 
-int				parsing(t_pix *pix, t_lines *lines_head)
+int				parsing(t_pix *pix, t_lines *lst, int **map, t_vec2 pos)
 {
 	size_t	y;
 	size_t	x;
 	size_t	i;
 
-	if (!(pix->map_val = (int **)malloc(pix->height * sizeof(int *))))
+	if (!(map = (int **)malloc(pix->height * sizeof(int *))))
 		errors_msg(4);
 	y = UINT64_MAX;
-	while (lines_head && ++y < pix->height)
+	while (lst && ++y < pix->height && !(i = 0) && (x = UINT64_MAX))
 	{
-		if (!(pix->map_val[y] = (int *)malloc(pix->width * sizeof(int))))
+		if (!(map[y] = (int *)malloc(pix->width * sizeof(int))))
 			errors_msg(4);
-		x = UINT64_MAX;
-		i = 0;
 		while (++x < pix->width)
 		{
-			pix->map_val[y][x] = ft_atoi_i(lines_head->str, &i);
+			map[y][x] = ft_atoi_i(lst->str, &i);
+			map[y][x] > TEXTURES + 1 ? map[y][x] = 1 : 0;
 			if (x == 0 || y == 0 || x == pix->width - 1 || y == pix->height - 1)
-				pix->map_val[y][x] = fix_frame(pix->map_val[y][x]);
-			else if (pix->map_val[y][x] == 9 && !(pix->map_val[y][x] = 0))
-				pix->pos = (t_vec2){ x, y };
-			printf("%d ", pix->map_val[y][x]);
+				map[y][x] = fix_frame(map[y][x]);
+			else if ((!map[y][x] && (pos.x == 0 || pos.y == 0))
+			|| (map[y][x] == 9 && !(map[y][x] = 0)))
+				pos = (t_vec2){ x + 0.5, y + 0.5 };
+//			printf("%d ", map[y][x]);
 		}
-		lines_head = lines_head->next;
-		printf("\n");
+		lst = lst->next;
+//		printf("\n");
 	}
-	(pix->pos.x == 0 && pix->pos.y == 0) ? errors_msg(3) : 0;
+//	printf("player pos x = %f, y = %f ", pos.x, pos.y);
+	(pos.x == 0 || pos.y == 0) ? errors_msg(3) : 0;
 	return (0);
 }
