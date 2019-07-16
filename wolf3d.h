@@ -54,12 +54,14 @@ typedef struct		s_pix
 	SDL_Window		*win;
 	SDL_Renderer	*ren;
 	SDL_Texture		*image;
+
 	SDL_Surface		*surf;
 	int				fd;
 	size_t 			width;
 	size_t			height;
 	t_vec2			pos;
-	int				buf[HEIGHT][WIDTH];
+//	int				buf[HEIGHT][WIDTH];
+	int				*screen;
 	int				**map;
 }					t_pix;
 
@@ -73,7 +75,7 @@ void				is_file_valid(t_pix *pix, t_lines **lines_head);
 int					errors_msg(int err);
 void				ft_add_to_end(t_lines **head, char *str);
 void				ft_del_all(t_lines **head);
-int					parsing(t_pix *pix, t_lines *lst, int **map, t_vec2 pos);
+int					parsing(t_pix *pix, t_lines *lst, t_vec2 pos);
 
 
 #endif

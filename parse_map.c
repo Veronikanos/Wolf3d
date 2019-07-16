@@ -43,29 +43,29 @@ static int		ft_atoi_i(const char *str, size_t *i)
 	return ((int)(num * minus));
 }
 
-int				parsing(t_pix *pix, t_lines *lst, int **map, t_vec2 pos)
+int				parsing(t_pix *pix, t_lines *lst, t_vec2 pos)
 {
 	size_t	y;
 	size_t	x;
 	size_t	i;
 
-	if (!(map = (int **)malloc(pix->height * sizeof(int *))))
+	if (!(pix->map = (int **)malloc(pix->height * sizeof(int *))))
 		errors_msg(4);
 	y = UINT64_MAX;
 	while (lst && ++y < pix->height && !(i = 0) && (x = UINT64_MAX))
 	{
-		if (!(map[y] = (int *)malloc(pix->width * sizeof(int))))
+		if (!(pix->map[y] = (int *)malloc(pix->width * sizeof(int))))
 			errors_msg(4);
 		while (++x < pix->width)
 		{
-			map[y][x] = ft_atoi_i(lst->str, &i);
-			map[y][x] > TEXTURES + 1 ? map[y][x] = 1 : 0;
+			pix->map[y][x] = ft_atoi_i(lst->str, &i);
+			pix->map[y][x] > TEXTURES + 1 ? pix->map[y][x] = 1 : 0;
 			if (x == 0 || y == 0 || x == pix->width - 1 || y == pix->height - 1)
-				map[y][x] = fix_frame(map[y][x]);
-			else if ((!map[y][x] && (pos.x == 0 || pos.y == 0))
-			|| (map[y][x] == 9 && !(map[y][x] = 0)))
+				pix->map[y][x] = fix_frame(pix->map[y][x]);
+			else if ((!pix->map[y][x] && (pos.x == 0 || pos.y == 0))
+			|| (pix->map[y][x] == 9 && !(pix->map[y][x] = 0)))
 				pos = (t_vec2){ x + 0.5, y + 0.5 };
-//			printf("%d ", map[y][x]);
+//			printf("%d ", pix->map[y][x]);
 		}
 		lst = lst->next;
 //		printf("\n");

@@ -13,12 +13,12 @@
 #include "wolf3d.h"
 
 
-void	verLine(t_pix *pix, size_t x, int s, int e, int color)
+void	verLine(t_pix *pix, size_t x, int y, int _end, int color)
 {
-	while (s < e)
+	while (y < _end)
 	{
-		pix->buf[s][x] = color;
-		s++;
+		pix->screen[y * WIDTH + x] = color;
+		y++;
 	}
 }
 
@@ -108,7 +108,8 @@ void	game_process(t_pix *pix)
 				side = 1;
 			}
 			//Проверка ударился ли луч о стену
-			if (pix->map[mapX][mapY] > 0) hit = 1;
+			if (pix->map[mapY][mapX] > 0)
+				hit = 1;
 		}
 
 		// Рассчитать расстояние, проецируемое по направлению камеры (евклидово расстояние даст эффект «рыбий глаз»!)
@@ -129,7 +130,7 @@ void	game_process(t_pix *pix)
 		// выбираем цвет стены
 		int color;
 		int texture;
-		texture = (pix->map[mapX][mapY]);
+		texture = (pix->map[mapY][mapX]);
 		if (texture == 1)
 			color = RED;
 		else if (texture == 2)
@@ -144,7 +145,7 @@ void	game_process(t_pix *pix)
 
 		// рисуем пиксели полосы в виде вертикальной линии
 		verLine(pix, x, drawStart, drawEnd, color);
-
+		printf("454\n");
 //		//время вывода и счетчик FPS
 //		oldTime = time;
 //		time = getTicks();
@@ -153,6 +154,7 @@ void	game_process(t_pix *pix)
 //		redraw();
 //		cls();
 	}
+
 }
 
 static t_pix	*init(t_pix *pix)
@@ -164,13 +166,22 @@ static t_pix	*init(t_pix *pix)
 		errors_msg(8); //уточнить ошибки
 	//ошибки
 	pix->win = SDL_CreateWindow(NAME, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, WIDTH, HEIGHT, SDL_WINDOW_ALLOW_HIGHDPI);
-	pix->ren = SDL_CreateRenderer(pix->win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-	pix->image = IMG_LoadTexture(pix->ren,"./image2.png");
-	pix->surf = SDL_GetWindowSurface(pix->win);
-//	int *ptr;
-//	ptr = pix->surf->pixels;
-//	ptr[0] = 0xff0000;
-	SDL_UpdateWindowSurface(pix->win);
+
+//	pix->ren = SDL_CreateRenderer(pix->win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+	pix->surf = SDL_GetWindowSurface(pix->win); //
+//	pix->surf = IMG_Load("./image2.png");
+	pix->screen = (int *)(pix->surf->pixels);
+//	screen[y * WIDTH + x] = color;
+
+	pix->screen[5 * WIDTH + 6] = RED;
+	pix->screen[5 * WIDTH + 7] = RED;
+	pix->screen[5 * WIDTH + 8] = RED;
+	pix->screen[5 * WIDTH + 9] = RED;
+	pix->screen[5 * WIDTH + 10] = RED;
+//	pix->image = SDL_CreateTextureFromSurface(pix->ren, pix->surf);
+//	pix->image = IMG_LoadTexture(pix->ren,"./image2.png");
+
+
 	pix->width = 0;
 	pix->height = 0;
 	pix->pos = (t_vec2){ 0, 0 };
@@ -199,8 +210,8 @@ int				main(int argc, char **argv)
 	if (read(pix->fd, NULL, 0))
 		errors_msg(6);
 	is_file_valid(pix, &lines_head);
-	parsing(pix, lines_head, pix->map, pix->pos);
-//	game_process(pix);
+	parsing(pix, lines_head, pix->pos);
+	game_process(pix);
 	close(pix->fd);
 
 	printf("%s\n", "okaaaay");
@@ -208,7 +219,7 @@ int				main(int argc, char **argv)
 
 
 	if (pix->win == NULL)
-		exit (1); //ошибки
+		exit (8); //ошибки
 
 	SDL_Rect player_RECT;
 	player_RECT.x = WIDTH / 2;   //Смещение полотна по Х
@@ -216,18 +227,24 @@ int				main(int argc, char **argv)
 	player_RECT.w = WIDTH; //Ширина полотна
 	player_RECT.h = HEIGHT; //Высота полотна
 
-	SDL_RenderClear(pix->ren); //Очистка рендера
-	SDL_RenderCopy(pix->ren, pix->image, NULL, &player_RECT); //Копируем в рендер персонажа
-	SDL_RenderPresent(pix->ren); //Погнали!!
+//	SDL_RenderClear(pix->ren); //Очистка рендера
+//	SDL_RenderCopy(pix->ren, pix->image, NULL, &player_RECT); //Копируем в рендер персонажа
+//	SDL_RenderPresent(pix->ren); //Погнали!!
 
 	while (running)
-		while(SDL_PollEvent(&event))
-			if((SDL_QUIT == event.type)
-			|| (SDL_KEYDOWN == event.type
-				&& SDL_SCANCODE_ESCAPE == event.key.keysym.scancode))
+	{
+		while (SDL_PollEvent(&event))
+			if ((SDL_QUIT == event.type)
+				|| (SDL_KEYDOWN == event.type
+					&& SDL_SCANCODE_ESCAPE == event.key.keysym.scancode))
 				running = 0;
 
+		SDL_UpdateWindowSurface(pix->win);
+	}
 
+//	SDL_DestroyTexture(pix->image);
+//	SDL_DestroyRenderer(pix->ren);
+	SDL_FreeSurface(pix->surf);
 	SDL_DestroyWindow(pix->win);
 	SDL_Quit();
 	return (0);
