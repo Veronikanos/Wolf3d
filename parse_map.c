@@ -43,7 +43,7 @@ static int		ft_atoi_i(const char *str, size_t *i)
 	return ((int)(num * minus));
 }
 
-int				parsing(t_pix *pix, t_lines *lst, t_vec2 pos)
+int				parsing(t_pix *pix, t_lines *lst, t_vec2 *pos)
 {
 	size_t	y;
 	size_t	x;
@@ -62,15 +62,15 @@ int				parsing(t_pix *pix, t_lines *lst, t_vec2 pos)
 			pix->map[y][x] > TEXTURES + 1 ? pix->map[y][x] = 1 : 0;
 			if (x == 0 || y == 0 || x == pix->width - 1 || y == pix->height - 1)
 				pix->map[y][x] = fix_frame(pix->map[y][x]);
-			else if ((!pix->map[y][x] && (pos.x == 0 || pos.y == 0))
+			else if ((!pix->map[y][x] && (pos->x == 0 || pos->y == 0))
 			|| (pix->map[y][x] == 9 && !(pix->map[y][x] = 0)))
-				pos = (t_vec2){ x + 0.5, y + 0.5 };
-//			printf("%d ", pix->map[y][x]);
+				*pos = (t_vec2){ x + 0.5, y + 0.5 };
+			printf("%d ", pix->map[y][x]);
 		}
 		lst = lst->next;
-//		printf("\n");
+		printf("\n");
 	}
-//	printf("player pos x = %f, y = %f ", pos.x, pos.y);
-	(pos.x == 0 || pos.y == 0) ? errors_msg(3) : 0;
+	printf("player pos x = %f, y = %f ", pos->x, pos->y);
+	(pos->x == 0 || pos->y == 0) ? errors_msg(3) : 0;
 	return (0);
 }

@@ -18,6 +18,7 @@
 # include <stdio.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <stdbool.h>
 # include "get_next_line.h"
 # include "libft.h"
 
@@ -43,6 +44,14 @@ typedef struct			s_draw
 	int		y;
 }						t_draw;
 
+typedef struct			s_flag
+{
+	bool			straight;
+	bool			back;
+	bool			right;
+	bool			left;
+}						t_flag;
+
 typedef struct		s_vector2
 {
 	double			x;
@@ -60,7 +69,14 @@ typedef struct		s_pix
 	size_t 			width;
 	size_t			height;
 	t_vec2			pos;
-//	int				buf[HEIGHT][WIDTH];
+	t_flag			flag;
+	t_vec2			dir;
+	t_vec2			plane;
+	double			time; // время текущего кадра
+	double			oldTime; // время предыдущего кадра
+
+	double			frameTime;
+	double			moveSpeed;
 	int				*screen;
 	int				**map;
 }					t_pix;
@@ -75,7 +91,7 @@ void				is_file_valid(t_pix *pix, t_lines **lines_head);
 int					errors_msg(int err);
 void				ft_add_to_end(t_lines **head, char *str);
 void				ft_del_all(t_lines **head);
-int					parsing(t_pix *pix, t_lines *lst, t_vec2 pos);
+int					parsing(t_pix *pix, t_lines *lst, t_vec2 *pos);
 
 
 #endif
