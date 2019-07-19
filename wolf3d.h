@@ -31,7 +31,7 @@
 # define WIDTH		512
 # define HEIGHT		384
 # define NAME		"Wolf3d by vtlostiu"
-# define TEXTURES	4
+# define TEXTURES	8
 
 # define RED		0xFC0000
 # define GREEN		0x45A400
@@ -77,6 +77,7 @@ typedef struct		s_pix
 
 	double			frameTime;
 	double			moveSpeed;
+	double			rotSpeed;
 	int				*screen;
 	int				**map;
 }					t_pix;

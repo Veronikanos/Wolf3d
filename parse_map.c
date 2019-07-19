@@ -64,7 +64,7 @@ int				parsing(t_pix *pix, t_lines *lst, t_vec2 *pos)
 				pix->map[y][x] = fix_frame(pix->map[y][x]);
 			else if ((!pix->map[y][x] && (pos->x == 0 || pos->y == 0))
 			|| (pix->map[y][x] == 9 && !(pix->map[y][x] = 0)))
-				*pos = (t_vec2){ x + 0.5, y + 0.5 };
+				*pos = (t_vec2){ 0.5f + x, 0.5f + y };
 			printf("%d ", pix->map[y][x]);
 		}
 		lst = lst->next;
