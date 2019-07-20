@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 21:32:53 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/11 20:03:16 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/20 22:21:04 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 
 # define WIDTH		512
 # define HEIGHT		384
+//# define WIDTH		1000
+//# define HEIGHT		600
 # define NAME		"Wolf3d by vtlostiu"
 # define TEXTURES	8
 
@@ -37,12 +39,13 @@
 # define GREEN		0x45A400
 # define BLUE		0x7FE6F8
 # define YELLOW		0xFEF963
+# define XYI		0x0C00FF
 
-typedef struct			s_draw
+typedef struct			s_map
 {
-	int		x;
-	int		y;
-}						t_draw;
+	int				x;
+	int				y;
+}						t_map;
 
 typedef struct			s_flag
 {
@@ -58,28 +61,48 @@ typedef struct		s_vector2
 	double			y;
 }					t_vec2;
 
+typedef struct		s_player
+{
+	t_vec2			pos;
+	t_vec2			dir;
+	double			move_rate;
+	double			rot_rate;
+}					t_plr;
+
+typedef struct		s_ray
+{
+	t_vec2			rayDir;
+	t_vec2			sideDist;
+	t_vec2			deltaDist;
+
+}					t_ray;
+
 typedef struct		s_pix
 {
 	SDL_Window		*win;
 	SDL_Renderer	*ren;
 	SDL_Texture		*image;
-
 	SDL_Surface		*surf;
 	int				fd;
 	size_t 			width;
 	size_t			height;
-	t_vec2			pos;
 	t_flag			flag;
-	t_vec2			dir;
-	t_vec2			plane;
 	double			time; // время текущего кадра
 	double			oldTime; // время предыдущего кадра
-
+	double			cameraX;
 	double			frameTime;
-	double			moveSpeed;
-	double			rotSpeed;
 	int				*screen;
 	int				**map;
+	int				lineHeight;
+	int				side;
+	t_vec2			plane;
+	t_map			map_cord;
+	t_map			drawfromto;
+	t_map			step;
+	t_plr			player;
+	t_ray			ray;
+	int				running;
+
 }					t_pix;
 
 typedef struct		s_lines
@@ -93,6 +116,10 @@ int					errors_msg(int err);
 void				ft_add_to_end(t_lines **head, char *str);
 void				ft_del_all(t_lines **head);
 int					parsing(t_pix *pix, t_lines *lst, t_vec2 *pos);
+void				event_handler(t_pix *pix);
+void				game_process(t_pix *pix);
+void				verLine(t_pix *pix, size_t x, int y, int _end, int color);
+t_pix				*init(t_pix *pix);
 
 
 #endif
