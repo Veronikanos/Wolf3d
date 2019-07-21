@@ -6,45 +6,38 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 21:47:16 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/20 22:15:54 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/21 22:33:53 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static int		choose_color(t_pix *pix)
-{
-	int color;
-	int texture;
-
-	texture = (pix->map[pix->map_cord.y][pix->map_cord.x]);
-	if (texture == 1)
-		color = RED;
-	else if (texture == 2)
-		color = GREEN;
-	else if (texture == 3)
-		color = BLUE;
-	else if (texture == 4)
-		color = YELLOW;
-
-	// дать разной яркости сторонам x и y
-	if (pix->side == 1)
-		//	color = color / 2;
-		color = XYI;
-	return (color);
-}
-
 static void		count_dist_and_line_hight(t_pix *pix)
 {
 	double perpWallDist;
+//	double wallX;
 
 	if (pix->side == 0)
+	{
 		perpWallDist = (pix->map_cord.x - pix->player.pos.x
-				+ (1.0f - pix->step.x) / 2.0f) / pix->ray.rayDir.x;
+						+ (1.0f - pix->step.x) / 2.0f) / pix->ray.rayDir.x;
+
+//		pix->wallX = pix->player.pos.y + perpWallDist * pix->ray.rayDir.y;
+
+
+	}
 	else
+	{
 		perpWallDist = (pix->map_cord.y - pix->player.pos.y
-				+ (1.0f - pix->step.y) / 2.0f) / pix->ray.rayDir.y;
+						+ (1.0f - pix->step.y) / 2.0f) / pix->ray.rayDir.y;
+	//	pix->wallX = (int)(pix->player.pos.x + perpWallDist * pix->ray.rayDir.x);
+
+	}
 	pix->lineHeight = (int)(HEIGHT / perpWallDist);
+
+
+//	pix->wallX -= floor(pix->wallX);
+
 
 	// вычисляем нижний и верхний пиксель для заполнения текущей полосы
 	pix->drawfromto.x = -pix->lineHeight / 2 + HEIGHT / 2;
@@ -83,27 +76,27 @@ static void		check_ray(t_pix *pix)
 	}
 }
 
-static void		count_raydirect(t_pix *pix, t_vec2 *pos)
+static void		count_raydirect(t_pix *pix, t_vec2 *pos, t_ray *ray)
 {
-	if (pix->ray.rayDir.x < 0)
+	if (ray->rayDir.x < 0)
 	{
 		pix->step.x = -1;
-		pix->ray.sideDist.x = (pos->x - pix->map_cord.x) * pix->ray.deltaDist.x;
+		ray->sideDist.x = (pos->x - pix->map_cord.x) * ray->deltaDist.x;
 	}
 	else
 	{
 		pix->step.x = 1;
-		pix->ray.sideDist.x = (pix->map_cord.x + 1 - pos->x) * pix->ray.deltaDist.x;
+		ray->sideDist.x = (pix->map_cord.x + 1 - pos->x) * ray->deltaDist.x;
 	}
-	if (pix->ray.rayDir.y < 0)
+	if (ray->rayDir.y < 0)
 	{
 		pix->step.y = -1;
-		pix->ray.sideDist.y = (pos->y - pix->map_cord.y) * pix->ray.deltaDist.y;
+		ray->sideDist.y = (pos->y - pix->map_cord.y) * ray->deltaDist.y;
 	}
 	else
 	{
 		pix->step.y = 1;
-		pix->ray.sideDist.y = (pix->map_cord.y + 1.0 - pos->y) * pix->ray.deltaDist.y;
+		ray->sideDist.y = (pix->map_cord.y + 1.0 - pos->y) * ray->deltaDist.y;
 	}
 }
 
@@ -130,9 +123,12 @@ void			game_process(t_pix *pix)
 											pix->ray.deltaDist.y
 											= fabs(1.0 / pix->ray.rayDir.y) };
 		// в каком направлении нужно двигаться: в направлении x или y? (+1 или -1)
-		count_raydirect(pix, &pix->player.pos);
+		count_raydirect(pix, &pix->player.pos, &pix->ray);
 		check_ray(pix);
 		count_dist_and_line_hight(pix);
+
+	//	pix->texX = (int)(pix->wallX * 64.0); //здесь заменить на высоту текстуры и кастовать в double
+
 		color = choose_color(pix);
 		verLine(pix, x, pix->drawfromto.x, pix->drawfromto.y, color);
 	}

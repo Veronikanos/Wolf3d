@@ -6,32 +6,11 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 19:33:33 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/20 22:23:26 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/21 19:24:33 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
-
-static void		clear_screen(t_pix *pix)
-{
-	size_t	y;
-	size_t	x;
-
-	y = UINT64_MAX;
-	while (++y < HEIGHT && (x = UINT64_MAX))
-		while (++x < WIDTH)
-			pix->screen[y * WIDTH + x] = 0x0;
-}
-
-
-void	verLine(t_pix *pix, size_t x, int y, int _end, int color)
-{
-	while (y < _end)
-	{
-		pix->screen[y * WIDTH + x] = color;
-		y++;
-	}
-}
 
 int				main(int argc, char **argv)
 {

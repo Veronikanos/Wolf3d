@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 22:20:25 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/20 22:20:25 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/21 22:26:47 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ t_pix	*init(t_pix *pix)
 //	pix->image = SDL_CreateTextureFromSurface(pix->ren, pix->surf);
 //	pix->image = IMG_LoadTexture(pix->ren,"./image2.png");
 
-	pix->flag = (t_flag) { 0, 0, 0, 0 };
+	pix->flag = (t_flag) { 0 };
 	pix->player.dir = (t_vec2) { -1, 0 };
 	pix->plane = (t_vec2) { 0, 0.66 };
 	pix->width = 0;
@@ -39,5 +39,7 @@ t_pix	*init(t_pix *pix)
 	pix->player.pos = (t_vec2){ 0 };
 	pix->time = 0; // время текущего кадра
 	pix->oldTime = 0; // время предыдущего кадра
+
+	pix->wallX = 0;
 	return (pix);
 }

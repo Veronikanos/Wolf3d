@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 21:32:53 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/20 22:21:04 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/21 22:26:47 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,16 @@
 # define TEXTURES	8
 
 # define RED		0xFC0000
-# define GREEN		0x45A400
+# define GREEN		0x4BE800
 # define BLUE		0x7FE6F8
-# define YELLOW		0xFEF963
-# define XYI		0x0C00FF
+# define YELLOW		0xFFFC00
+# define PURPLE		0xB234FD
+# define MAGENTA	0xE949FA
+# define PINK		0xFA2BD8
+# define CORAL		0xFA2B8D
+# define DEF_COL	0x0C00FF
+# define FLOOR_COL	0xFFEBED
+# define CEIL_COL	0xB7F1FA
 
 typedef struct			s_map
 {
@@ -53,6 +59,7 @@ typedef struct			s_flag
 	bool			back;
 	bool			right;
 	bool			left;
+	bool			tex_change;
 }						t_flag;
 
 typedef struct		s_vector2
@@ -91,6 +98,10 @@ typedef struct		s_pix
 	double			oldTime; // время предыдущего кадра
 	double			cameraX;
 	double			frameTime;
+
+	double			wallX;
+	int				texX;
+
 	int				*screen;
 	int				**map;
 	int				lineHeight;
@@ -116,9 +127,11 @@ int					errors_msg(int err);
 void				ft_add_to_end(t_lines **head, char *str);
 void				ft_del_all(t_lines **head);
 int					parsing(t_pix *pix, t_lines *lst, t_vec2 *pos);
+int					choose_color(t_pix *pix);
 void				event_handler(t_pix *pix);
 void				game_process(t_pix *pix);
 void				verLine(t_pix *pix, size_t x, int y, int _end, int color);
+void				clear_screen(t_pix *pix);
 t_pix				*init(t_pix *pix);
 
 
