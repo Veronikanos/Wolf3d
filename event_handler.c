@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 19:56:33 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/21 19:48:46 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/22 22:19:05 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 static void		walk(t_pix *pix, t_vec2 dir, double moveSpeed)
 {
-	if (!(pix->map[(int) (pix->player.pos.y)]
-	[(int) (pix->player.pos.x + dir.x * moveSpeed)]))
+	if ((!(pix->map[(int)(pix->player.pos.y)][(int) (pix->player.pos.x + dir.x * moveSpeed * 28.2)])))
 		pix->player.pos.x += dir.x * moveSpeed;
-//	printf("%===\n\n");printf("%f \n\n",  dir.x * move_rate);
-	if (!(pix->map[(int) (pix->player.pos.y + dir.y * moveSpeed)]
-	[(int) (pix->player.pos.x)]))
+	if ((!(pix->map[(int)(pix->player.pos.y + dir.y * moveSpeed * 28.2)][(int) (pix->player.pos.x)])))
+	{
 		pix->player.pos.y += dir.y * moveSpeed;
+	}
+//	printf("%===\n\n");printf("%f \n\n",  dir.x * move_rate);
 //	printf("%f  %f\n\n", pix->player.pos.x, pix->player.pos.y);
 }
 

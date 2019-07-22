@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 21:32:53 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/21 22:26:47 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/22 22:20:55 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,17 @@
 # include "SDL_ttf.h"
 # include "SDL_mixer.h"
 
-# define WIDTH		512
-# define HEIGHT		384
-//# define WIDTH		1000
-//# define HEIGHT		600
+//# define WIDTH		512
+//# define HEIGHT		384
+# define WIDTH		1000
+# define HEIGHT		600
 # define NAME		"Wolf3d by vtlostiu"
 # define TEXTURES	8
+
+# define TEXWIDTH	64
+# define TEXHEIGHT	64
+
+# define DIST		28.2
 
 # define RED		0xFC0000
 # define GREEN		0x4BE800
@@ -78,7 +83,7 @@ typedef struct		s_player
 
 typedef struct		s_ray
 {
-	t_vec2			rayDir;
+	t_vec2			dir;
 	t_vec2			sideDist;
 	t_vec2			deltaDist;
 
@@ -89,7 +94,8 @@ typedef struct		s_pix
 	SDL_Window		*win;
 	SDL_Renderer	*ren;
 	SDL_Texture		*image;
-	SDL_Surface		*surf;
+	SDL_Surface		*screen_surf;
+	SDL_Surface		**tex_arr;
 	int				fd;
 	size_t 			width;
 	size_t			height;
@@ -101,13 +107,16 @@ typedef struct		s_pix
 
 	double			wallX;
 	int				texX;
+	int				texY;
+	int				texNum;
+	int				d;
 
 	int				*screen;
 	int				**map;
 	int				lineHeight;
 	int				side;
 	t_vec2			plane;
-	t_map			map_cord;
+	t_map			ray_map_cord;
 	t_map			drawfromto;
 	t_map			step;
 	t_plr			player;

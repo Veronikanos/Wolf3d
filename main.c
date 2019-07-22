@@ -6,11 +6,44 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 19:33:33 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/21 19:24:33 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/22 21:51:26 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
+
+SDL_Surface		*load_tex(t_pix *pix, char *name_tex)
+{
+	SDL_Surface			*pic_surf;
+	SDL_Surface			*convert;
+	SDL_PixelFormat		format;
+
+	format.format = SDL_PIXELFORMAT_ARGB8888;
+	format.palette = NULL;
+	format.BytesPerPixel = sizeof(Uint32);
+	format.BitsPerPixel = (Uint8)(format.BytesPerPixel * 8);
+	format.Rmask = 0;
+	format.Gmask = 0;
+	format.Bmask = 0;
+	format.Amask = 0;
+	pic_surf = IMG_Load(name_tex);
+	convert = SDL_ConvertSurface(pic_surf, &format, 0); //errors if no pic_surf or convert.
+	SDL_FreeSurface(pic_surf);
+	return(convert);
+}
+
+void	init_tex(t_pix *pix)
+{
+	pix->tex_arr = (SDL_Surface **)malloc(sizeof(SDL_Surface *) * TEXTURES);
+	pix->tex_arr[0] = load_tex(pix, "bricks.jpg");
+	pix->tex_arr[1] = load_tex(pix, "bookshelf.gif");
+	pix->tex_arr[2] = load_tex(pix, "multibrick.gif");
+	pix->tex_arr[3] = load_tex(pix, "diamond.gif");
+//	pix->tex_arr[4] = load_tex(pix, "diamond.gif");
+//	pix->tex_arr[5] = load_tex(pix, "diamond.gif");
+//	pix->tex_arr[6] = load_tex(pix, "diamond.gif");
+//	pix->tex_arr[7] = load_tex(pix, "diamond.gif");
+}
 
 int				main(int argc, char **argv)
 {
@@ -28,6 +61,8 @@ int				main(int argc, char **argv)
 		errors_msg(6);
 	is_file_valid(pix, &lines_head);
 	parsing(pix, lines_head, &pix->player.pos);
+
+	init_tex(pix);
 	game_process(pix);
 	close(pix->fd);
 //	printf("%s\n", "okaaaay");
@@ -64,7 +99,7 @@ int				main(int argc, char **argv)
 
 //	SDL_DestroyTexture(pix->image);
 //	SDL_DestroyRenderer(pix->ren);
-	SDL_FreeSurface(pix->surf);
+	SDL_FreeSurface(pix->screen_surf);
 	SDL_DestroyWindow(pix->win);
 	SDL_Quit();
 //

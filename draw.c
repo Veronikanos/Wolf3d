@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 19:23:32 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/21 22:33:13 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/22 20:14:51 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		choose_color(t_pix *pix)
 	color = DEF_COL;
 	if (pix->flag.tex_change == true)
 	{
-		texture = (pix->map[pix->map_cord.y][pix->map_cord.x]);
+		texture = (pix->map[pix->ray_map_cord.y][pix->ray_map_cord.x]);
 		if (texture == 1)
 			color = RED;
 		else if (texture == 2)
@@ -35,13 +35,13 @@ int		choose_color(t_pix *pix)
 		//	color = color / 2;
 	else
 	{
-		if (pix->side == 0 && pix->ray.rayDir.x < 0)
+		if (pix->side == 0 && pix->ray.dir.x < 0)
 			color = PURPLE;
-		if (pix->side == 0 && pix->ray.rayDir.x > 0)
+		if (pix->side == 0 && pix->ray.dir.x > 0)
 			color = MAGENTA;
-		if (pix->side == 1 && pix->ray.rayDir.y < 0)
+		if (pix->side == 1 && pix->ray.dir.y < 0)
 			color = PINK;
-		if (pix->side == 1 && pix->ray.rayDir.y > 0)
+		if (pix->side == 1 && pix->ray.dir.y > 0)
 			color = CORAL;
 
 
@@ -73,7 +73,16 @@ void	verLine(t_pix *pix, size_t x, int y, int _end, int color)
 		yy++;
 	}
 	while (y < _end)
+//	{
+//		pix->screen[y * WIDTH + x] = color;
+//		y++;
+//	}
 	{
+		pix->d = y * 256 - HEIGHT * 128 + pix->lineHeight * 128;
+		pix->texY = ((pix->d * TEXHEIGHT) / pix->lineHeight) / 256;
+
+		color = ((int *)(pix->tex_arr[pix->texNum]->pixels))
+				[TEXWIDTH * pix->texY + pix->texX];
 		pix->screen[y * WIDTH + x] = color;
 		y++;
 	}
