@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 21:47:16 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/22 22:07:59 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/23 20:27:11 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ static void		count_dist_and_line_hight(t_pix *pix)
 	if (pix->side == 0)
 	{
 		perpWallDist = (pix->ray_map_cord.x - pix->player.pos.x
-			+ (1 - pix->step.x) / 2.0f) / pix->ray.dir.x;
+			+ ((1u - pix->step.x) >> 1u)) / pix->ray.dir.x;
 		pix->wallX = pix->player.pos.y + perpWallDist * pix->ray.dir.y;
 	}
 	else
 	{
 		perpWallDist = (pix->ray_map_cord.y - pix->player.pos.y
-			+ (1 - pix->step.y) / 2.0f) / pix->ray.dir.y;
+			+ ((1u - pix->step.y) >> 1u)) / pix->ray.dir.y;
 		pix->wallX = pix->player.pos.x + perpWallDist * pix->ray.dir.x;
 
 	}
@@ -33,9 +33,9 @@ static void		count_dist_and_line_hight(t_pix *pix)
 
 
 	// вычисляем нижний и верхний пиксель для заполнения текущей полосы
-	pix->lineHeight = (int)(HEIGHT / perpWallDist);
-	pix->drawfromto.x = -pix->lineHeight / 2 + HEIGHT / 2;
-	pix->drawfromto.y = pix->lineHeight / 2 + HEIGHT / 2;
+	pix->lineHeight = (int)(HEIGHT / perpWallDist) << 1;
+	pix->drawfromto.x = -(pix->lineHeight >> 1u) + HEIGHT_H;
+	pix->drawfromto.y = (pix->lineHeight >> 1u) + HEIGHT_H;
 	if (pix->drawfromto.x < 0)
 		pix->drawfromto.x = 0;
 	if (pix->drawfromto.y >= HEIGHT)
@@ -43,11 +43,11 @@ static void		count_dist_and_line_hight(t_pix *pix)
 
 	pix->texNum = pix->map[pix->ray_map_cord.y][pix->ray_map_cord.x] - 1;
 
-	pix->texX = (int)(pix->wallX * TEXWIDTH);
+	pix->tex_cord.x = (int)(pix->wallX * TEXWIDTH);
 	if (pix->side == 0 && pix->ray.dir.x > 0)
-		pix->texX = TEXWIDTH - pix->texX - 1;
+		pix->tex_cord.x = TEXWIDTH - pix->tex_cord.x - 1;
 	if (pix->side == 1 && pix->ray.dir.y < 0)
-		pix->texX = TEXWIDTH - pix->texX - 1;
+		pix->tex_cord.x = TEXWIDTH - pix->tex_cord.x - 1;
 }
 
 static void		check_ray(t_pix *pix)
@@ -108,6 +108,8 @@ void			game_process(t_pix *pix)
 	int color;
 
 	x = UINT64_MAX;
+	time_and_rate(pix);
+	event_handler(pix);
 	while (++x < WIDTH)
 	{
 		// вычисляем положение и направление луча

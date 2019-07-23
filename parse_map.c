@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 17:48:16 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/04/25 18:40:58 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/23 21:33:27 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,12 +50,12 @@ int				parsing(t_pix *pix, t_lines *lst, t_vec2 *pos)
 	size_t	i;
 
 	if (!(pix->map = (int **)malloc(pix->height * sizeof(int *))))
-		errors_msg(4);
+		errors_handler(4, pix);
 	y = UINT64_MAX;
 	while (lst && ++y < pix->height && !(i = 0) && (x = UINT64_MAX))
 	{
 		if (!(pix->map[y] = (int *)malloc(pix->width * sizeof(int))))
-			errors_msg(4);
+			errors_handler(4, pix);
 		while (++x < pix->width)
 		{
 			pix->map[y][x] = ft_atoi_i(lst->str, &i);
@@ -65,12 +65,12 @@ int				parsing(t_pix *pix, t_lines *lst, t_vec2 *pos)
 			else if ((!pix->map[y][x] && (pos->x == 0 || pos->y == 0))
 			|| (pix->map[y][x] == 9 && !(pix->map[y][x] = 0)))
 				*pos = (t_vec2){ 0.5f + x, 0.5f + y };
-			printf("%d ", pix->map[y][x]);
+//			printf("%d ", pix->map[y][x]);
 		}
 		lst = lst->next;
-		printf("\n");
+//		printf("\n");
 	}
-	printf("player pos x = %f, y = %f ", pos->x, pos->y);
-	(pos->x == 0 || pos->y == 0) ? errors_msg(3) : 0;
+//	printf("player pos x = %f, y = %f ", pos->x, pos->y);
+	(pos->x == 0 || pos->y == 0) ? errors_handler(3, pix) : 0;
 	return (0);
 }

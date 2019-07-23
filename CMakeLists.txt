@@ -21,7 +21,10 @@ include_directories(frameworks/SDL2_mixer.framework/Headers/)
 link_directories(${SDL2_LIBRARY})
 add_executable(Wolf3d
         ${SOURCES})
-target_link_libraries(Wolf3d -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_ttf)
+target_link_libraries(Wolf3d -lSDL2 -lSDL2_mixer -lSDL2_image -lSDL2_ttf
+        -fsanitize="address" -g3 -fno-omit-frame-pointer
+#        -fsanitize="undefined" -g3 -fno-omit-frame-pointer
+)
 
 #cmake_minimum_required(VERSION 3.12.1)
 #project(Wolf3d C)

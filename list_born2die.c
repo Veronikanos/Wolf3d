@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   list_born2die.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: vtlostiu <vtlostiu@student.unit.ua>        +#+  +:+       +#+        */
+/*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/02 18:35:18 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/04/02 18:57:53 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/23 21:33:27 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void	ft_del_all(t_lines **head)
+int		ft_del_all(t_lines **head)
 {
 	t_lines *curr;
 	t_lines *tmp;
@@ -26,6 +26,7 @@ void	ft_del_all(t_lines **head)
 		ft_memdel((void *)&tmp);
 	}
 	*head = NULL;
+	return (1);
 }
 
 void	ft_add_to_end(t_lines **head, char *str)
@@ -35,7 +36,7 @@ void	ft_add_to_end(t_lines **head, char *str)
 	if (!*head)
 	{
 		if (!(*head = (t_lines *)ft_memalloc(sizeof(t_lines))))
-			errors_msg(4);
+			errors_handler(4, NULL);
 		(*head)->str = ft_strdup(str);
 		(*head)->next = NULL;
 	}
@@ -45,7 +46,7 @@ void	ft_add_to_end(t_lines **head, char *str)
 		while (curr && curr->next)
 			curr = curr->next;
 		if (!(curr->next = (t_lines *)ft_memalloc(sizeof(t_lines))))
-			errors_msg(4);
+			errors_handler(4, NULL);
 		curr = curr->next;
 		curr->str = ft_strdup(str);
 		curr->next = NULL;
