@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 21:32:53 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/23 22:22:21 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/25 17:13:07 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,19 +30,16 @@
 
 //# define WIDTH		512
 //# define HEIGHT		384
-# define WIDTH		1000u
-# define HEIGHT		600u
-# define WIDTH_H	500u
-# define HEIGHT_H	300u
+# define WIDTH		1280u
+# define HEIGHT		720u
+# define WIDTH_H	640u
+# define HEIGHT_H	360u
 # define NAME		"Wolf3d by vtlostiu"
 # define TEXTURES	8
 
 # define TEXWIDTH	64
 # define TEXHEIGHT	64
-
 # define DIST		8.0
-# define SPEED		2.0
-
 # define RED		0xFC0000
 # define GREEN		0x6CC409
 # define BLUE		0x433AFF
@@ -63,10 +60,12 @@ typedef struct			s_flag
 	bool			straight;
 	bool			back;
 	bool			right;
+	bool			right_rot;
 	bool			left;
+	bool			left_rot;
 	bool			tex_change;
-	bool			tex_compas;
-	bool			speed;
+	bool			tex_compass;
+	bool			speed_up;
 }						t_flag;
 
 typedef struct		s_vector2
@@ -86,9 +85,8 @@ typedef struct		s_player
 typedef struct		s_ray
 {
 	t_vec2			dir;
-	t_vec2			sideDist;
-	t_vec2			deltaDist;
-
+	t_vec2			side_dist;
+	t_vec2			diff_dist;
 }					t_ray;
 
 typedef struct		s_pix
@@ -102,27 +100,27 @@ typedef struct		s_pix
 	size_t			height;
 	t_flag			flag;
 	double			time;
-	double			oldTime;
-	double			cameraX;
-	double			frameTime;
-
-	double			wallX;
-	int				texNum;
+	double			old_time;
+	double			new_time;
+	int				tex_id;
 	int				d;
-	int				*screen;
+	Uint32			*screen;
 	int				**map;
-	int				lineHeight;
-	int				side;
+	Uint32			lineHeight;
+	int				edge;
 	t_vec2			plane;
+	t_vec2			floorWall;
+	double			wall_x;
+	double			wall_dist;
+
 	t_map			ray_map_cord;
-	t_map			drawfromto;
+	t_map			from_to;
 	t_map			step;
 	t_map			tex_cord;
 	t_plr			player;
 	t_ray			ray;
-//	double			speed;
-	bool			running;
-
+	double			speed;
+	bool			game_over;
 }					t_pix;
 
 typedef struct		s_lines
@@ -131,7 +129,7 @@ typedef struct		s_lines
 	struct s_lines	*next;
 }					t_lines;
 
-void				is_file_valid(t_pix *pix, t_lines **lines_head, char **argv);
+void				is_file_valid(t_pix *pix, t_lines **lst, char **argv);
 int					errors_handler(int err, t_pix *pix);
 void				ft_add_to_end(t_lines **head, char *str);
 int					ft_del_all(t_lines **head);
@@ -140,11 +138,10 @@ int					choose_color(t_pix *pix);
 int					choose_tex(t_pix *pix, int y);
 void				event_handler(t_pix *pix);
 void				game_process(t_pix *pix);
-void				verLine(t_pix *pix, size_t x, int y, int _end, int color);
+void				draw_line(t_pix *pix, size_t x, t_map from_to, int color);
 void				clear_screen(t_pix *pix);
 void				time_and_rate(t_pix *pix);
-void				del_all(t_pix *pix);
-
-t_pix				*init();
+void				del_all(t_pix *pix, size_t i);
+t_pix				*init(void);
 
 #endif

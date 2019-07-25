@@ -6,25 +6,25 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 19:56:33 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/23 22:23:24 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/25 16:14:19 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-static void		walk(t_pix *pix, t_vec2 dir, double moveSpeed)
+static void		walk(t_pix *pix, t_vec2 dir, double speed_walk)
 {
 	unsigned int pos_x;
 	unsigned int pos_y;
 
 	pos_y = (unsigned int)(pix->player.pos.y);
-	pos_x = (unsigned int)(pix->player.pos.x + dir.x * moveSpeed * DIST);
+	pos_x = (unsigned int)(pix->player.pos.x + dir.x * speed_walk * DIST);
 	if (pos_x < pix->width && pos_y < pix->height && !(pix->map[pos_y][pos_x]))
-		pix->player.pos.x += dir.x * moveSpeed;
-	pos_y = (unsigned int)(pix->player.pos.y + dir.y * moveSpeed * DIST);
+		pix->player.pos.x += dir.x * speed_walk;
+	pos_y = (unsigned int)(pix->player.pos.y + dir.y * speed_walk * DIST);
 	pos_x = (unsigned int)(pix->player.pos.x);
 	if (pos_x < pix->width && pos_y < pix->height && !(pix->map[pos_y][pos_x]))
-		pix->player.pos.y += dir.y * moveSpeed;
+		pix->player.pos.y += dir.y * speed_walk;
 }
 
 static void		rotate(t_plr *player, t_vec2 *plane, double rot_rate)
@@ -44,21 +44,22 @@ void			keyboard_events(t_pix *pix, Uint32 type, SDL_Keycode key)
 	if ((SDL_KEYDOWN == type && (val = true))
 	|| (SDL_KEYUP == type && !(val = false)))
 	{
-		if (SDLK_UP == key)
+		if (SDLK_UP == key || SDLK_w == key)
 			pix->flag.straight = val;
-		if (SDLK_DOWN == key)
+		if (SDLK_DOWN == key || SDLK_s == key)
 			pix->flag.back = val;
-		if (SDLK_RIGHT == key)
+		if (SDLK_RIGHT == key || SDLK_e == key)
+			pix->flag.right_rot = val;
+		if (SDLK_LEFT == key || SDLK_q == key)
+			pix->flag.left_rot = val;
+		if (SDLK_d == key)
 			pix->flag.right = val;
-		if (SDLK_LEFT == key)
+		if (SDLK_a == key)
 			pix->flag.left = val;
-//		if (SDLK_KP_ENTER == key)
-//		{
-//			pix->flag.speed = val;
-//			pix->speed += 5;
-//		}
+		if (SDLK_RCTRL == key)
+			pix->flag.speed_up = val;
 	}
-	SDL_KEYUP == type && SDLK_HOME == key && --pix->flag.tex_compas;
+	SDL_KEYUP == type && SDLK_HOME == key && --pix->flag.tex_compass;
 	SDL_KEYUP == type && SDLK_END == key && --pix->flag.tex_change;
 }
 
@@ -70,15 +71,19 @@ void			event_handler(t_pix *pix)
 	{
 		if (SDL_QUIT == event.type
 		|| (SDL_KEYDOWN == event.type && SDLK_ESCAPE == event.key.keysym.sym))
-			pix->running = false;
+			pix->game_over = false;
 		keyboard_events(pix, event.type, event.key.keysym.sym);
 	}
 	if (pix->flag.straight)
 		walk(pix, pix->player.dir, pix->player.move_rate);
 	if (pix->flag.back)
 		walk(pix, pix->player.dir, -pix->player.move_rate);
-	if (pix->flag.right)
+	if (pix->flag.right_rot)
 		rotate(&pix->player, &pix->plane, pix->player.rot_rate);
-	if (pix->flag.left)
+	if (pix->flag.left_rot)
 		rotate(&pix->player, &pix->plane, pix->player.rot_rate * -1);
+	if (pix->flag.left)
+		walk(pix, pix->plane, -pix->player.move_rate);
+	if (pix->flag.right)
+		walk(pix, pix->plane, pix->player.move_rate);
 }

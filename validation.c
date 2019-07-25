@@ -29,7 +29,7 @@ static int		is_valid_row(char const *buf)
 	return (1);
 }
 
-void			is_file_valid(t_pix *pix, t_lines **lines_head, char **argv)
+void			is_file_valid(t_pix *pix, t_lines **lst, char **argv)
 {
 	char	*buf;
 	int		fd;
@@ -43,14 +43,14 @@ void			is_file_valid(t_pix *pix, t_lines **lines_head, char **argv)
 		{
 			if ((pix->width = ft_count_words(buf, 32)) < 3)
 				errors_handler(1, NULL);
-			ft_add_to_end(lines_head, buf);
+			ft_add_to_end(lst, buf);
 		}
 		else
 		{
-			if (pix->width != ft_count_words(buf, 32) && ft_del_all(lines_head))
+			if (pix->width != ft_count_words(buf, 32) && ft_del_all(lst))
 				errors_handler(1, NULL);
 			else
-				ft_add_to_end(lines_head, buf);
+				ft_add_to_end(lst, buf);
 		}
 		ft_memdel((void *)&buf);
 	}

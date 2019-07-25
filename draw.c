@@ -6,13 +6,13 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 19:23:32 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/23 17:07:22 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/25 21:37:29 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "wolf3d.h"
 
-void		clear_screen(t_pix *pix)
+void			clear_screen(t_pix *pix)
 {
 	size_t	y;
 	size_t	x;
@@ -23,25 +23,80 @@ void		clear_screen(t_pix *pix)
 			pix->screen[y * WIDTH + x] = 0x0;
 }
 
-void	verLine(t_pix *pix, size_t x, int y, int _end, int color)
+static void		which_side_of_wall(t_pix *pix)
 {
-	int yy;
-
-	yy = 0;
-	while (yy < y)
+	if (pix->edge == 0 && pix->ray.dir.x > 0)
 	{
-		pix->screen[yy * WIDTH + x] = CEIL_COL;
-		yy++;
+		pix->floorWall.x = pix->ray_map_cord.x;
+		pix->floorWall.y = pix->ray_map_cord.y + pix->wall_x;
 	}
-	while (y < _end)
+	else if (pix->edge == 0 && pix->ray.dir.x < 0)
+	{
+		pix->floorWall.x = pix->ray_map_cord.x + 1.0;
+		pix->floorWall.y = pix->ray_map_cord.y + pix->wall_x;
+	}
+	else if (pix->edge == 1 && pix->ray.dir.y > 0)
+	{
+		pix->floorWall.x = pix->ray_map_cord.x + pix->wall_x;
+		pix->floorWall.y = pix->ray_map_cord.y;
+	}
+	else if (pix->edge == 1 && pix->ray.dir.y < 0)
+	{
+		pix->floorWall.x = pix->ray_map_cord.x + pix->wall_x;
+		pix->floorWall.y = pix->ray_map_cord.y + 1.0;
+	}
+//	pix->tex_id = 1;
+}
+
+void			draw_line(t_pix *pix, size_t x, t_map from_to, int color)
+{
+	int		yy;
+	int		y;
+	int		end;
+
+	double currentDist;
+	double distPlayer;
+	double distWall;
+
+	y = from_to.x;
+	end = from_to.y;
+	yy = 0;
+	which_side_of_wall(pix);
+//	while (yy < y)
+//	{
+//		pix->screen[yy * WIDTH + x] = CEIL_COL;
+//		yy++;
+//	}
+	while (y < end)
 	{
 		color = (pix->flag.tex_change) ? choose_tex(pix, y) : choose_color(pix);
 		pix->screen[y * WIDTH + x] = color;
 		y++;
 	}
+	y = from_to.y;
+//	end = from_to.y;
 	while (y < HEIGHT)
 	{
-		pix->screen[y * WIDTH + x] = FLOOR_COL;
+
+//		pix->screen[y * WIDTH + x] = FLOOR_COL;
+		currentDist = HEIGHT / (2.0 * y - HEIGHT);
+
+		double weight = (currentDist - distPlayer) / (distWall - distPlayer);
+
+		double currentFloorX = weight * pix->floorWall.x + (1.0 - weight) * pix->player.pos.x;
+		double currentFloorY = weight * pix->floorWall.y + (1.0 - weight) * pix->player.pos.y;
+
+		int floorTexX;
+		int floorTexY;
+		floorTexX = (int)(currentFloorX * TEXWIDTH) % TEXWIDTH;
+		floorTexY = (int)(currentFloorY * TEXHEIGHT) % TEXHEIGHT;
+
+		pix->screen[(y) * WIDTH + x] =
+				((((Uint32 *)pix->tex_arr[2]->pixels)
+				[TEXWIDTH * floorTexY + floorTexX] >> 1u) & 8355711u);
+		pix->screen[(HEIGHT - y) * WIDTH + x] =
+			(((Uint32 *)pix->tex_arr[3]->pixels)
+			[TEXWIDTH * floorTexY + floorTexX]);
 		y++;
 	}
 }

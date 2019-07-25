@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/01 17:48:16 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/23 21:33:27 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/25 16:38:27 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,12 +65,9 @@ int				parsing(t_pix *pix, t_lines *lst, t_vec2 *pos)
 			else if ((!pix->map[y][x] && (pos->x == 0 || pos->y == 0))
 			|| (pix->map[y][x] == 9 && !(pix->map[y][x] = 0)))
 				*pos = (t_vec2){ 0.5f + x, 0.5f + y };
-//			printf("%d ", pix->map[y][x]);
 		}
 		lst = lst->next;
-//		printf("\n");
 	}
-//	printf("player pos x = %f, y = %f ", pos->x, pos->y);
 	(pos->x == 0 || pos->y == 0) ? errors_handler(3, pix) : 0;
 	return (0);
 }
