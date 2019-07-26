@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.12.1)
 project(Wolf3d C)
 file(GLOB SOURCES
-        libft/*.h
-        libft/*.c
-        *.h
-        *.c)
+        libft.h
+        ./lib/libft/*.c
+        inc/*.h
+        src/*.c)
 set(CMAKE_C_STANDARD 99)
 set(SDL2_INCLUDE_DIR ~/.brew/include/SDL2/
         ~/.brew/include/SDL2_mixer/
@@ -12,7 +12,8 @@ set(SDL2_INCLUDE_DIR ~/.brew/include/SDL2/
         ~/.brew/include/SDL2_ttf/)
 set(SDL2_LIBRARY ~/.brew/lib/)
 
-include_directories(libft/)
+include_directories(inc/)
+include_directories(lib/libft/)
 include_directories(frameworks/SDL2.framework/Headers/)
 include_directories(frameworks/SDL2_image.framework/Headers/)
 include_directories(frameworks/SDL2_ttf.framework/Headers/)

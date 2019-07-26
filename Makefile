@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: vtlostiu <vtlostiu@student.unit.ua>        +#+  +:+       +#+         #
+#    By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/03 20:20:52 by vtlostiu          #+#    #+#              #
-#    Updated: 2019/07/04 18:49:57 by vtlostiu         ###   ########.fr        #
+#    Updated: 2019/07/26 18:42:04 by vtlostiu         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,17 @@ NAME = wolf3d
 OBJ_PATH = obj
 SRC_PATH = src
 
-SRC_N	= main.c
+SRC_N	= main.c \
+	color.c \
+	draw.c \
+	error_handler \
+	event_handler \
+	get_next_line \
+	init.c \
+	list_born2die.c \
+	parse_map \
+	raycasting.c \
+	validation.c
 
 INC = -I ./inc -I ./lib/libft/includes/
 
@@ -24,7 +34,7 @@ SDL_FR		= -rpath ./lib/frameworks -framework SDL2
 
 CC = gcc -g
 
-FLAG = -Wall -Wextra -Werror -pthreads
+FLAG = -Wall -Wextra -Werror
 
 SRC = $(addprefix ./$(SRC_PATH)/, $(SRC_N))
 
@@ -41,7 +51,6 @@ $(NAME): objdir $(OBJ)
 		@make -C ./lib/libft/
 		$(CC) -o $(NAME) $(OBJ) $(INC) -L ./lib/libft/ -lft $(SDL_INC) $(SDL_FR)
 		@echo "        \033[0;34m Wolf3d \033[0;35m"
-
 
 objdir:
 	mkdir -p $(OBJ_PATH)
