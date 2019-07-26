@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 21:47:16 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/25 20:48:39 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/26 16:30:18 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,28 +30,16 @@ void			find_start(t_pix *pix, double wall_dist, double wall_x)
 
 static void		count_dist(t_pix *pix)
 {
-	double wall_dist;
-	double wall_x;
-
-	if (pix->edge == 0)
-	{
-		wall_dist = (pix->ray_map_cord.x - pix->player.pos.x
-			+ ((1u - pix->step.x) >> 1u)) / pix->ray.dir.x;
-		wall_x = pix->player.pos.y + wall_dist * pix->ray.dir.y;
-	}
-	else
-	{
-		wall_dist = (pix->ray_map_cord.y - pix->player.pos.y
+	pix->wall_dist = (pix->edge == 0)
+		? (pix->ray_map_cord.x - pix->player.pos.x
+			+ ((1u - pix->step.x) >> 1u)) / pix->ray.dir.x
+		: (pix->ray_map_cord.y - pix->player.pos.y
 			+ ((1u - pix->step.y) >> 1u)) / pix->ray.dir.y;
-		wall_x = pix->player.pos.x + wall_dist * pix->ray.dir.x;
-	}
-	wall_x -= floor(wall_x);
-
-	pix->wall_x = wall_x; //
-	pix->wall_dist = wall_dist; //
-
-	find_start(pix, pix->wall_dist, pix->wall_x); //
-//	find_start(pix, wall_dist, wall_x);
+	pix->wall_x = (pix->edge == 0)
+		? pix->player.pos.y + pix->wall_dist * pix->ray.dir.y
+		: pix->player.pos.x + pix->wall_dist * pix->ray.dir.x;
+	pix->wall_x -= floor(pix->wall_x);
+	find_start(pix, pix->wall_dist, pix->wall_x);
 }
 
 static void		check_ray(t_pix *pix)

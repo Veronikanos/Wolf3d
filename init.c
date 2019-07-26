@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 22:20:25 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/25 21:35:02 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/26 15:39:06 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,10 @@ static void				init_tex(t_pix *pix)
 	pix->tex_arr[1] = load_tex(pix, "textures/bookshelf.gif");
 	pix->tex_arr[2] = load_tex(pix, "textures/multibrick.gif");
 	pix->tex_arr[3] = load_tex(pix, "textures/diamond.gif");
-	pix->tex_arr[4] = load_tex(pix, "textures/wood.jpg");
-//	pix->tex_arr[5] = load_tex(pix, "textures/hexgreen.gif");
-//	pix->tex_arr[6] = load_tex(pix, "textures/stones.jpg");
-//	pix->tex_arr[7] = load_tex(pix, "textures/concrete.jpeg");
+	pix->tex_arr[4] = load_tex(pix, "textures/hexgreen.gif");
 	pix->tex_arr[5] = load_tex(pix, "textures/x.gif");
 	pix->tex_arr[6] = load_tex(pix, "textures/y.gif");
-	pix->tex_arr[7] = load_tex(pix, "textures/j.gif");
+	pix->tex_arr[7] = load_tex(pix, "textures/z.gif");
 }
 
 t_pix					*init(void)

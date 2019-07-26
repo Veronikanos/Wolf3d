@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/21 19:23:32 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/25 21:37:29 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/26 16:28:33 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,41 +26,33 @@ void			clear_screen(t_pix *pix)
 static void		which_side_of_wall(t_pix *pix)
 {
 	if (pix->edge == 0 && pix->ray.dir.x > 0)
-	{
-		pix->floorWall.x = pix->ray_map_cord.x;
-		pix->floorWall.y = pix->ray_map_cord.y + pix->wall_x;
-	}
+		pix->wall_side = (t_vec2){ pix->ray_map_cord.x,
+								   pix->ray_map_cord.y + pix->wall_x };
 	else if (pix->edge == 0 && pix->ray.dir.x < 0)
-	{
-		pix->floorWall.x = pix->ray_map_cord.x + 1.0;
-		pix->floorWall.y = pix->ray_map_cord.y + pix->wall_x;
-	}
+		pix->wall_side = (t_vec2){ pix->ray_map_cord.x + 1.0,
+								   pix->ray_map_cord.y + pix->wall_x };
 	else if (pix->edge == 1 && pix->ray.dir.y > 0)
-	{
-		pix->floorWall.x = pix->ray_map_cord.x + pix->wall_x;
-		pix->floorWall.y = pix->ray_map_cord.y;
-	}
+		pix->wall_side = (t_vec2){ pix->ray_map_cord.x + pix->wall_x,
+								   pix->ray_map_cord.y };
 	else if (pix->edge == 1 && pix->ray.dir.y < 0)
-	{
-		pix->floorWall.x = pix->ray_map_cord.x + pix->wall_x;
-		pix->floorWall.y = pix->ray_map_cord.y + 1.0;
-	}
-//	pix->tex_id = 1;
+		pix->wall_side = (t_vec2){ pix->ray_map_cord.x + pix->wall_x,
+								   pix->ray_map_cord.y + 1.0 };
 }
 
 void			draw_line(t_pix *pix, size_t x, t_map from_to, int color)
 {
-	int		yy;
-	int		y;
-	int		end;
+	int yy;
+	int y;
+	int end;
 
 	double currentDist;
 	double distPlayer;
 	double distWall;
-
-	y = from_to.x;
+	distWall = pix->wall_dist;
+	distPlayer = 0.0;
+	y   = from_to.x;
 	end = from_to.y;
-	yy = 0;
+	yy  = 0;
 	which_side_of_wall(pix);
 //	while (yy < y)
 //	{
@@ -83,20 +75,22 @@ void			draw_line(t_pix *pix, size_t x, t_map from_to, int color)
 
 		double weight = (currentDist - distPlayer) / (distWall - distPlayer);
 
-		double currentFloorX = weight * pix->floorWall.x + (1.0 - weight) * pix->player.pos.x;
-		double currentFloorY = weight * pix->floorWall.y + (1.0 - weight) * pix->player.pos.y;
+		double currentFloorX =
+				weight * pix->wall_side.x + (1.0 - weight) * pix->player.pos.x;
+		double currentFloorY =
+				weight * pix->wall_side.y + (1.0 - weight) * pix->player.pos.y;
 
 		int floorTexX;
 		int floorTexY;
 		floorTexX = (int)(currentFloorX * TEXWIDTH) % TEXWIDTH;
 		floorTexY = (int)(currentFloorY * TEXHEIGHT) % TEXHEIGHT;
 
-		pix->screen[(y) * WIDTH + x] =
+		pix->screen[y * WIDTH + x] =
 				((((Uint32 *)pix->tex_arr[2]->pixels)
 				[TEXWIDTH * floorTexY + floorTexX] >> 1u) & 8355711u);
 		pix->screen[(HEIGHT - y) * WIDTH + x] =
-			(((Uint32 *)pix->tex_arr[3]->pixels)
-			[TEXWIDTH * floorTexY + floorTexX]);
+				(((Uint32 *)pix->tex_arr[3]->pixels)
+				[TEXWIDTH * floorTexY + floorTexX]);
 		y++;
 	}
 }

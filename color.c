@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/23 17:10:07 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/25 19:28:58 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/26 15:42:31 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,13 @@ int				choose_tex(t_pix *pix, int y)
 	if (pix->flag.tex_compass == false)
 	{
 		if (pix->edge == 0 && pix->ray.dir.x < 0)
-			pix->tex_id = 0;
-		if (pix->edge == 0 && pix->ray.dir.x > 0)
-			pix->tex_id = 1;
-		if (pix->edge == 1 && pix->ray.dir.y < 0)
 			pix->tex_id = 2;
-		if (pix->edge == 1 && pix->ray.dir.y > 0)
+		if (pix->edge == 0 && pix->ray.dir.x > 0)
 			pix->tex_id = 3;
+		if (pix->edge == 1 && pix->ray.dir.y < 0)
+			pix->tex_id = 0;
+		if (pix->edge == 1 && pix->ray.dir.y > 0)
+			pix->tex_id = 1;
 	}
 	color = ((int *)(pix->tex_arr[pix->tex_id]->pixels))
 	[TEXWIDTH * pix->tex_cord.y + pix->tex_cord.x];

@@ -6,7 +6,7 @@
 /*   By: vtlostiu <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/02 21:32:53 by vtlostiu          #+#    #+#             */
-/*   Updated: 2019/07/25 17:13:07 by vtlostiu         ###   ########.fr       */
+/*   Updated: 2019/07/26 15:39:06 by vtlostiu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ typedef struct		s_pix
 	Uint32			lineHeight;
 	int				edge;
 	t_vec2			plane;
-	t_vec2			floorWall;
+	t_vec2			wall_side;
 	double			wall_x;
 	double			wall_dist;
 
