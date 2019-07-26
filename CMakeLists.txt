@@ -14,10 +14,10 @@ set(SDL2_LIBRARY ~/.brew/lib/)
 
 include_directories(inc/)
 include_directories(lib/libft/)
-include_directories(frameworks/SDL2.framework/Headers/)
-include_directories(frameworks/SDL2_image.framework/Headers/)
-include_directories(frameworks/SDL2_ttf.framework/Headers/)
-include_directories(frameworks/SDL2_mixer.framework/Headers/)
+include_directories(lib/frameworks/SDL2.framework/Headers/)
+include_directories(lib/frameworks/SDL2_image.framework/Headers/)
+include_directories(lib/frameworks/SDL2_ttf.framework/Headers/)
+include_directories(lib/frameworks/SDL2_mixer.framework/Headers/)
 
 link_directories(${SDL2_LIBRARY})
 add_executable(Wolf3d
