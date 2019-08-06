@@ -26,3 +26,5 @@ Control:
 ![img](https://github.com/Veronikanos/wolf3d/raw/master/screenshots/4.png)
 ![img](https://github.com/Veronikanos/wolf3d/raw/master/screenshots/5.png)
 ![img](https://github.com/Veronikanos/wolf3d/raw/master/screenshots/6.png)
+
+Exit by closing the window or pressing ESC.
