@@ -1,7 +1,7 @@
 # Wolf3d
 This project is inspired by the world-famous eponymous 90’s game, which was the first FPS ever.
 
-![](https://media.giphy.com/media/l4jzRgtQHKSTAQTR6E/giphy.gif)
+![](https://github.com/Veronikanos/Wolf3d/blob/master/screenshots/wolf3donline-video-cuttercom.gif)
 
 Requirements:
 
