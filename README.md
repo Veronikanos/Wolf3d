@@ -1,7 +1,7 @@
 # Wolf3d
 This project is inspired by the world-famous eponymous 90’s game, which was the first FPS ever.
 
-![](https://github.com/Veronikanos/Wolf3d/blob/master/screenshots/wolf3donline-video-cuttercom.gif)
+![](https://github.com/Veronikanos/Wolf3d/blob/master/screenshots/wolf3donline-video-cuttercom.gif )
 
 Requirements:
 
@@ -21,7 +21,7 @@ Control:
   * change to vampire mode - c.
   * turn on/off light - l.
 
-![img](https://github.com/Veronikanos/wolf3d/raw/master/screenshots/1.png)
+![img](https://github.com/Veronikanos/wolf3d/raw/master/screenshots/1.png | 50)
 ![img](https://github.com/Veronikanos/wolf3d/raw/master/screenshots/2.png)
 ![img](https://github.com/Veronikanos/wolf3d/raw/master/screenshots/3.png)
 ![img](https://github.com/Veronikanos/wolf3d/raw/master/screenshots/4.png)
